@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Web Development Quiz App</title>
+    <!-- Tailwind CSS for sleek, modern, and responsive UI styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- SweetAlert2 JavaScript and CSS for rich, polished modal feedback popups -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Google Fonts Inter for professional interface typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Sticky Navigation Top Bar Header Interface Line -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 font-bold text-xl text-indigo-600 tracking-tight">
+                <span>🎓</span> DevQuiz Portal
+            </div>
+            <div id="nav-user-info" class="hidden flex items-center gap-4">
+                <span id="nav-username" class="text-sm font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200"></span>
+                <button onclick="app.logout()" class="text-sm font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Dynamic Single-Page App Container -->
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8">
+        
+        <!-- Signup View Section Module Card Page Block -->
+        <section id="view-signup" class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8 transform transition-all duration-300">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Create your account</h2>
+                <p class="text-sm text-slate-500 mt-1">Join the ultimate web development knowledge check</p>
+            </div>
+            <form onsubmit="app.handleSignup(event)" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Full Name</label>
+                    <input type="text" id="signup-name" required placeholder="John Doe" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Email Address</label>
+                    <input type="email" id="signup-email" required placeholder="you@example.com" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Password</label>
+                    <input type="password" id="signup-password" required placeholder="••••••••" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition text-sm">
+                </div>
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-md shadow-indigo-100 transition duration-150 text-sm mt-2 cursor-pointer">Sign Up</button>
+            </form>
+            <div class="text-center mt-6 pt-6 border-t border-slate-100">
+                <p class="text-sm text-slate-500">Already have an account? <button onclick="app.showView('login')" class="text-indigo-600 font-semibold hover:underline cursor-pointer">Log In</button></p>
+            </div>
+        </section>
+
+        <!-- Login View Section Module Card Page Block -->
+        <section id="view-login" class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8 hidden transform transition-all duration-300">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Welcome back</h2>
+                <p class="text-sm text-slate-500 mt-1">Sign in to resume testing your portal skills</p>
+            </div>
+            <form onsubmit="app.handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Email Address</label>
+                    <input type="email" id="login-email" required placeholder="you@example.com" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition text-sm">
+                </div>
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-md shadow-indigo-100 transition duration-150 text-sm mt-2 cursor-pointer">Log In</button>
+            </form>
+            <div class="text-center mt-6 pt-6 border-t border-slate-100">
+                <p class="text-sm text-slate-500">New here? <button onclick="app.showView('signup')" class="text-indigo-600 font-semibold hover:underline cursor-pointer">Create account</button></p>
+            </div>
+        </section>
+
+        <!-- Home View Section Module Card Page Block -->
+        <section id="view-home" class="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8 hidden transform transition-all duration-300">
+            <div class="border-b border-slate-100 pb-5 mb-6 text-center md:text-left">
+                <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider rounded-md mb-3">Assessment Portal</span>
+                <h1 id="quiz-title" class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight"></h1>
+                <p id="quiz-description" class="text-slate-500 mt-2 text-sm md:text-base leading-relaxed"></p>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl flex flex-col justify-center">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Questions</span>
+                    <span id="meta-total-questions" class="text-xl font-bold text-slate-800 mt-0.5"></span>
+                </div>
+                <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl flex flex-col justify-center">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Time Per Question</span>
+                    <span id="meta-time-per-question" class="text-xl font-bold text-slate-800 mt-0.5"></span>
+                </div>
+            </div>
+            <div class="space-y-3 bg-amber-50 border border-amber-200/60 p-4 rounded-xl text-amber-800 mb-8 text-sm">
+                <p class="font-semibold flex items-center gap-1.5">⚠️ Crucial Exam Instructions:</p>
+                <ul class="list-disc pl-4 space-y-1 text-amber-700/90">
+                    <li>The next button stays disabled until you select a core option choice.</li>
+                    <li>If the timer hits zero, the card automatically transitions to the next item.</li>
+                </ul>
+            </div>
+            <button onclick="app.startQuiz()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold rounded-xl shadow-lg shadow-emerald-100 transition duration-150 text-base tracking-wide flex items-center justify-center gap-2 cursor-pointer">
+                🚀 Begin Your Quiz Challenge
+            </button>
+        </section>
+
+        <!-- Quiz Panel Running View Section Module Card Page Block -->
+        <section id="view-quiz" class="w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-slate-100 hidden transform transition-all duration-300 overflow-hidden">
+            <!-- Header Status Panel Line -->
+            <div class="bg-slate-50 border-b border-slate-100 px-6 py-4 flex flex-wrap gap-4 items-center justify-between">
+                <span id="quiz-progress-text" class="text-sm font-semibold text-slate-500 uppercase tracking-wider"></span>
+                <div class="flex items-center gap-2 font-mono font-bold text-sm bg-rose-50 border border-rose-100 text-rose-600 px-3 py-1.5 rounded-xl transition-all duration-300" id="timer-box">
+                    <span>⏱️ Remaining:</span>
+                    <span id="quiz-timer" class="text-base w-6 text-center">30</span>
+                </div>
+            </div>
+            <!-- Progress Line Bar Indicator -->
+            <div class="w-full h-1 bg-slate-100">
+                <div id="quiz-progress-bar" class="h-full bg-indigo-600 transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <!-- Core Question Content Options Wrapper Area -->
+            <div class="p-6 md:p-8">
+                <h3 id="quiz-question-text" class="text-lg md:text-xl font-bold text-slate-900 leading-snug mb-6"></h3>
+                <div id="quiz-options-container" class="space-y-3.5">
+                    <!-- Standard Option Buttons are injected dynamically inside here -->
+                </div>
+                <!-- Action Controls Section Footer Line -->
+                <div class="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+                    <button id="btn-next" onclick="app.nextQuestion()" disabled class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40 text-white font-bold text-sm rounded-xl shadow-md shadow-indigo-100 transition duration-150 flex items-center gap-1.5 cursor-pointer">
+                        Next Question <span>⏭️</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Result View Section Module Card Page Block -->
+        <section id="view-result" class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8 text-center hidden transform transition-all duration-300">
+            <div class="mb-5 text-5xl">🎉</div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Congratulations!</h2>
+            <p class="text-slate-500 text-sm mt-1">You have completed the Web Development Quiz challenge successfully.</p>
+            
+            <!-- Dynamically Loaded Dynamic Score Visual Circles Elements Panel -->
+            <div class="my-8 py-6 px-4 bg-slate-50 border border-slate-100 rounded-2xl max-w-[240px] mx-auto">
+                <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Your Dynamic Score</span>
+                <div class="text-4xl font-black text-indigo-600 tracking-tight" id="result-score">0 / 0</div>
+                <div class="mt-3 inline-block px-3 py-1 bg-indigo-100 text-indigo-800 font-bold text-sm rounded-full" id="result-percentage">0%</div>
+            </div>
+
+            <p id="result-feedback" class="text-sm font-medium text-slate-700 mb-2"></p>
+            <p class="text-xs text-indigo-500 font-semibold tracking-wide uppercase">Keep Learning & Keep Coding!</p>
+
+            <button onclick="app.resetToHome()" class="w-full mt-8 py-3 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm rounded-xl shadow-md transition duration-150 cursor-pointer">
+                🔄 Return back to Home Dashboard
+            </button>
+        </section>
+
+    </main>
+
+    <!-- Project Assignment Submission Footer Info Block Link -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400 font-medium">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>© 2026 Developer Assessment Portal. Assignment Submission Ready.</p>
+            <p>Built with HTML, CSS, Tailwind, JS, and SweetAlert2.</p>
+        </div>
+    </footer>
+
+    <!-- Comprehensive Single File Engine Architectural Code Logic Implementation JavaScript Object -->
+    <script>
+        class QuizApplication {
+            constructor() {
+                // Static Quiz Metadata Values Configuration Object
+                this.meta = {
+                    title: "Web Development Mastery Quiz",
+                    description: "Test your knowledge of core foundational and advanced aspects of web engineering including semantic HTML tags, CSS Flexbox layouts, basic syntax operations, ES6 structures, and local memory states.",
+                    totalQuestions: 25,
+                    timePerQuestion: 30
+                };
+
+                // Complete 25-Question Factual Web Development Knowledge Array Database
+                this.questions = [
+                    // --- 1-9: HTML Knowledge Questions ---
+                    { q: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Text Machine Language", "Hyper Tool Multi Language", "Home Text Markup Language"], answer: 0 },
+                    { q: "Which semantic HTML element defines independent, self-contained layout blocks?", options: ["<div>", "<section>", "<article>", "<aside>"], answer: 2 },
+                    { q: "Which attribute opens links in completely new browser tabs by standard configuration?", options: ["target='_blank'", "target='_new'", "rel='noopener'", "href='new'"], answer: 0 },
+                    { q: "Which input type value renders natively optimized sliders on viewports?", options: ["type='slider'", "type='range'", "type='number'", "type='progress'"], answer: 1 },
+                    { q: "Which tag is structurally used to link internal scripting files onto web templates?", options: ["<link>", "<script>", "<javascript>", "<code_block>"], answer: 1 },
+                    { q: "What is the standard root wrapper element for all nested form subcomponents?", options: ["<fieldset>", "<form>", "<input_group>", "<action>"], answer: 1 },
+                    { q: "Which property attribute provides accessible text descriptions for structural images?", options: ["title", "description", "alt", "src_info"], answer: 2 },
+                    { q: "Which element specifies descriptive captions inside structured table matrices?", options: ["<thead>", "<caption>", "<summary>", "<title>"], answer: 1 },
+                    { q: "Which element groups descriptive items inside modern accessible choice menus?", options: ["<optgroup>", "<select>", "<datalist>", "<options>"], answer: 0 },
+                    
+                    // --- 10-17: CSS Knowledge Questions ---
+                    { q: "Which CSS display setting transforms layout flow into responsive flex grids?", options: ["display: block", "display: grid", "display: flex", "display: inline-flex"], answer: 2 },
+                    { q: "Which property changes background rendering alignment patterns inside boxes?", options: ["background-color", "background-position", "background-size", "object-fit"], answer: 1 },
+                    { q: "Which rule segment activates specialized modern adaptive viewport media calculations?", options: ["@media", "@keyframes", "@import", "@support"], answer: 0 },
+                    { q: "Which border margin item controls inner text spaces relative to container lines?", options: ["margin", "padding", "border-width", "outline"], answer: 1 },
+                    { q: "Which standard selection query targets elements by structural class rules?", options: ["#classname", ".classname", "element[class]", "*classname"], answer: 1 },
+                    { q: "Which axis line does 'justify-content' control when running active row flows?", options: ["Cross Axis", "Main Axis", "Z-Axis", "Vertical Grid"], answer: 1 },
+                    { q: "Which layout scheme extracts items entirely away from regular page layouts?", options: ["position: relative", "position: absolute", "position: static", "position: flow-root"], answer: 1 },
+                    { q: "Which token variable points dynamically to universal custom system variables?", options: ["var(--name)", "val(--name)", "get(--name)", "prop(--name)"], answer: 0 },
+
+                    // --- 18-25: JavaScript Knowledge Questions ---
+                    { q: "Which memory keyword allows variable reassignments within standard dynamic loops?", options: ["const", "var", "let", "global"], answer: 2 },
+                    { q: "Which global structural object processes dynamic client window memory operations?", options: ["sessionStorage", "localStorage", "document.cookie", "indexedDB"], answer: 1 },
+                    { q: "Which modern array method maps transforming iterations into fully new arrays?", options: ["forEach()", "filter()", "map()", "reduce()"], answer: 2 },
+                    { q: "Which DOM call method retrieves exactly one element matching selector chains?", options: ["getElementById()", "querySelectorAll()", "querySelector()", "getElementsByClassName()"], answer: 2 },
+                    { q: "Which mechanism stops dynamic standard event bubbling patterns on active clicks?", options: ["preventDefault()", "stopPropagation()", "stopImmediatePropagation()", "cancelBubble()"], answer: 1 },
+                    { q: "What is the absolute output format of typical JSON.stringify method steps?", options: ["Object literal", "String sequence", "Array dataset", "Binary stream"], answer: 1 },
+                    { q: "Which token sequence character denotes structural ES6 template literal lines?", options: ["Single Quotes ''", "Double Quotes \"\"", "Backticks ``", "Slashes //"], answer: 2 },
+                    { q: "Which loop type iterates over value keys of modern iterable dataset collections?", options: ["for...in", "for...of", "while()", "do...while()"], answer: 1 }
+                ];
+
+                // Runtime State Tracker Context Data Values
+                this.currentUser = null;
+                this.currentQuestionIndex = 0;
+                this.score = 0;
+                this.selectedAnswerIndex = null;
+                this.timerInterval = null;
+                this.timeLeft = 30;
+
+                this.init();
+            }
+
+            init() {
+                // Read configurations, sync values, and load home info elements
+                document.getElementById('quiz-title').innerText = this.meta.title;
+                document.getElementById('quiz-description').innerText = this.meta.description;
+                document.getElementById('meta-total-questions').innerText = `${this.meta.totalQuestions} Items`;
+                document.getElementById('meta-time-per-question').innerText = `${this.meta.timePerQuestion} Seconds`;
+                
+                // Keep routing consistent by falling back to the standard authentication gate view
+                this.showView('signup');
+            }
+
+            showView(viewId) {
+                // Single-Page Architecture Dynamic View Toggler Layer Rules
+                ['signup', 'login', 'home', 'quiz', 'result'].forEach(id => {
+                    const el = document.getElementById(`view-${id}`);
+                    if(id === viewId) {
+                        el.classList.remove('hidden');
+                        el.classList.add('block');
+                    } else {
+                        el.classList.remove('block');
+                        el.classList.add('hidden');
+                    }
+                });
+
+                // Control Top Bar Layout Profile Panel States
+                const navUserInfo = document.getElementById('nav-user-info');
+                if(['home', 'quiz', 'result'].includes(viewId) && this.currentUser) {
+                    document.getElementById('nav-username').innerText = `👤 ${this.currentUser.name}`;
+                    navUserInfo.classList.remove('hidden');
+                    navUserInfo.classList.add('flex');
+                } else {
+                    navUserInfo.classList.remove('flex');
+                    navUserInfo.classList.add('hidden');
+                }
+            }
+
+            handleSignup(e) {
+                e.preventDefault();
+                const name = document.getElementById('signup-name').value.trim();
+                const email = document.getElementById('signup-email').value.trim().toLowerCase();
+                const password = document.getElementById('signup-password').value;
+
+                if (!name || !email || !password) return;
+
+                // Store user directly as a simple JSON object inside Local Storage
+                const userObject = { name, email, password };
+                localStorage.setItem(email, JSON.stringify(userObject));
+
+                // Beautiful SweetAlert2 Modal confirmation display
+                Swal.fire({
+                    title: 'Signup Successful!',
+                    text: 'Your account has been created successfully.',
+                    icon: 'success',
+                    confirmButtonColor: '#4f46e5',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                // Clear input form spaces to ensure clear memory transitions
+                e.target.reset();
+
+                // Instantly redirect layout view over to login screen area
+                setTimeout(() => this.showView('login'), 1500);
+            }
+
+            handleLogin(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value.trim().toLowerCase();
+                const password = document.getElementById('login-password').value;
+
+                const storedUserRaw = localStorage.getItem(email);
+                
+                if (!storedUserRaw) {
+                    Swal.fire({
+                        title: 'Invalid credentials!',
+                        text: 'No user account found matching this email profile.',
+                        icon: 'error',
+                        confirmButtonColor: '#ef4444'
+                    });
+                    return;
+                }
+
+                const parsedUser = JSON.parse(storedUserRaw);
+
+                if (parsedUser.password !== password) {
+                    Swal.fire({
+                        title: 'Invalid email or password!',
+                        text: 'Please recheck your credential secrets entry choices.',
+                        icon: 'error',
+                        confirmButtonColor: '#ef4444'
+                    });
+                    return;
+                }
+
+                // Successful login profile loading steps
+                this.currentUser = parsedUser;
+
+                Swal.fire({
+                    title: 'Login Successful!',
+                    text: 'Welcome back!',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                e.target.reset();
+
+                // Standardized assignment mandate: redirect after approximately 1.5 seconds
+                setTimeout(() => this.showView('home'), 1500);
+            }
+
+            logout() {
+                this.stopTimer();
+                this.currentUser = null;
+                this.showView('login');
+                Swal.fire({
+                    text: 'Logged out successfully.',
+                    icon: 'info',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+
+            startQuiz() {
+                this.currentQuestionIndex = 0;
+                this.score = 0;
+                this.selectedAnswerIndex = null;
+                this.showView('quiz');
+                this.loadQuestion();
+            }
+
+            loadQuestion() {
+                this.selectedAnswerIndex = null;
+                
+                // Disable Next Button by Default configuration baseline guidelines
+                const nextBtn = document.getElementById('btn-next');
+                nextBtn.disabled = true;
+
+                const currentQuestion = this.questions[this.currentQuestionIndex];
+                
+                // Update Progress Panel Strings and Bar Elements
+                document.getElementById('quiz-progress-text').innerText = `Question ${String(this.currentQuestionIndex + 1).padStart(2, '0')} / ${this.meta.totalQuestions}`;
+                const progressPercentage = ((this.currentQuestionIndex) / this.meta.totalQuestions) * 100;
+                document.getElementById('quiz-progress-bar').style.width = `${progressPercentage}%`;
+
+                // Load Question Content Strings
+                document.getElementById('quiz-question-text').innerText = currentQuestion.q;
+
+                // Load Option Choices Layout Blocks
+                const container = document.getElementById('quiz-options-container');
+                container.innerHTML = '';
+
+                currentQuestion.options.forEach((option, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left px-5 py-4 border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 font-medium text-sm transition-all flex items-center justify-between group cursor-pointer";
+                    btn.innerHTML = `
+                        <span class="flex items-center gap-3">
+                            <span class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-slate-300 text-xs font-bold text-slate-400 group-hover:border-indigo-500 group-hover:text-indigo-600 transition" id="opt-circle-${idx}">
+                                ${String.fromCharCode(65 + idx)}
+                            </span>
+                            <span class="text-slate-700">${option}</span>
+                        </span>
+                    `;
+                    btn.onclick = () => this.selectOption(idx);
+                    container.appendChild(btn);
+                });
+
+                // Reset and launch core structural timer countdown tick loop
+                this.resetTimer();
+            }
+
+            selectOption(index) {
+                this.selectedAnswerIndex = index;
+
+                // Visual Indicator Updates: Reset styles of all options first
+                const totalOptions = this.questions[this.currentQuestionIndex].options.length;
+                const container = document.getElementById('quiz-options-container');
+                
+                Array.from(container.children).forEach((btn, idx) => {
+                    const circle = document.getElementById(`opt-circle-${idx}`);
+                    if(idx === index) {
+                        // Highlight selected choice option card cleanly
+                        btn.className = "w-full text-left px-5 py-4 border-2 border-indigo-600 bg-indigo-50/40 rounded-xl font-medium text-sm transition-all flex items-center justify-between group cursor-pointer";
+                        circle.className = "w-6 h-6 flex items-center justify-center rounded-full bg-indigo-600 border-2 border-indigo-600 text-xs font-bold text-white transition";
+                    } else {
+                        // Reset other buttons back to neutral state layouts
+                        btn.className = "w-full text-left px-5 py-4 border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 font-medium text-sm transition-all flex items-center justify-between group cursor-pointer";
+                        circle.className = "w-6 h-6 flex items-center justify-center rounded-full border-2 border-slate-300 text-xs font-bold text-slate-400 group-hover:border-indigo-500 group-hover:text-indigo-600 transition";
+                    }
+                });
+
+                // Enable Next Button immediately after an answer is chosen
+                document.getElementById('btn-next').disabled = false;
+            }
+
+            resetTimer() {
+                this.stopTimer();
+                this.timeLeft = this.meta.timePerQuestion;
+                
+                const timerText = document.getElementById('quiz-timer');
+                const timerBox = document.getElementById('timer-box');
+                
+                timerText.innerText = this.timeLeft;
+                timerBox.className = "flex items-center gap-2 font-mono font-bold text-sm bg-indigo-50 border border-indigo-100 text-indigo-600 px-3 py-1.5 rounded-xl transition-all duration-300";
+
+                this.timerInterval = setInterval(() => {
+                    this.timeLeft--;
+                    timerText.innerText = this.timeLeft;
+
+                    // Warn the user as time gets critical
+                    if (this.timeLeft <= 10) {
+                        timerBox.className = "flex items-center gap-2 font-mono font-bold text-sm bg-rose-50 border border-rose-100 text-rose-600 px-3 py-1.5 rounded-xl animate-pulse";
+                    }
+
+                    if (this.timeLeft <= 0) {
+                        this.stopTimer();
+                        // Handle timeout: automatically move to the next question
+                        this.handleTimeout();
+                    }
+                }, 1000);
+            }
+
+            stopTimer() {
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                    this.timerInterval = null;
+                }
+            }
+
+            handleTimeout() {
+                // Process answer evaluation steps based on current item configuration selection rules
+                this.evaluateCurrentAnswer();
+
+                // Trigger SweetAlert2 toast notification to flag timeout status
+                Swal.fire({
+                    text: "Time's up! Moving to the next question.",
+                    icon: 'warning',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                // Shift onto subsequent item loop pathways step transitions
+                this.advanceQuizFlow();
+            }
+
+            nextQuestion() {
+                this.stopTimer();
+                this.evaluateCurrentAnswer();
+                this.advanceQuizFlow();
+            }
+
+            evaluateCurrentAnswer() {
+                // Dynamic verification calculation metrics rule setups
+                if (this.selectedAnswerIndex !== null) {
+                    const correctAnswerIdx = this.questions[this.currentQuestionIndex].answer;
+                    if (this.selectedAnswerIndex === correctAnswerIdx) {
+                        this.score++;
+                    }
+                }
+            }
+
+            advanceQuizFlow() {
+                this.currentQuestionIndex++;
+                if (this.currentQuestionIndex < this.meta.totalQuestions) {
+                    this.loadQuestion();
+                } else {
+                    this.showResults();
+                }
+            }
+
+            showResults() {
+                this.stopTimer();
+                
+                // Dynamic calculations formula configuration rules mandate implementation steps
+                const percentage = Math.round((this.score / this.meta.totalQuestions) * 100);
+                
+                document.getElementById('result-score').innerText = `${this.score} / ${this.meta.totalQuestions}`;
+                document.getElementById('result-percentage').innerText = `${percentage}%`;
+
+                // Set semantic textual string messages based on percentage score
+                const feedbackEl = document.getElementById('result-feedback');
+                if (percentage >= 80) {
+                    feedbackEl.innerText = "Exceptional engineering insight! You mastered this challenge perfectly.";
+                    feedbackEl.className = "text-sm font-semibold text-emerald-600 mb-2";
+                } else if (percentage >= 60) {
+                    feedbackEl.innerText = "Great passing marks score! Keep refining your skills.";
+                    feedbackEl.className = "text-sm font-semibold text-indigo-600 mb-2";
+                } else {
+                    feedbackEl.innerText = "Better luck next time! Review your foundational concepts.";
+                    feedbackEl.className = "text-sm font-semibold text-amber-600 mb-2";
+                }
+
+                // Render result section view
+                this.showView('result');
+            }
+
+            resetToHome() {
+                this.showView('home');
+            }
+        }
+
+        // Global single instance initialization step
+        const app = new QuizApplication();
+    </script>
+</body>
+</html>
